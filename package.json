@@ -14,8 +14,8 @@
     "version:patch": "cd projects/ngx-umami && npm version patch --no-git-tag-version",
     "version:minor": "cd projects/ngx-umami && npm version minor --no-git-tag-version",
     "version:major": "cd projects/ngx-umami && npm version major --no-git-tag-version",
-    "prepublish:lib": "pnpm run lint && pnpm run test:coverage && pnpm run build",
-    "publish:lib": "cd dist/ngx-umami && pnpm publish --access public"
+    "prepublish:lib": "bun run lint && bun run test:coverage && bun run build",
+    "publish:lib": "cd dist/ngx-umami && bun publish --access public"
   },
   "dependencies": {
     "@angular/common": "19.2.18",
