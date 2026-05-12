@@ -1,6 +1,6 @@
 {
-  "name": "ngx-umami-workspace",
-  "version": "0.0.0",
+  "name": "@cacic-fct/ngx-umami",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "build": "ng build ngx-umami",
@@ -11,11 +11,11 @@
     "lint:fix": "ng lint ngx-umami --fix",
     "format": "prettier --write \"projects/**/*.ts\"",
     "format:check": "prettier --check \"projects/**/*.ts\"",
-    "version:patch": "cd projects/ngx-umami && npm version patch --no-git-tag-version",
-    "version:minor": "cd projects/ngx-umami && npm version minor --no-git-tag-version",
-    "version:major": "cd projects/ngx-umami && npm version major --no-git-tag-version",
+    "version:patch": "cd projects/ngx-umami && bun version patch --no-git-tag-version",
+    "version:minor": "cd projects/ngx-umami && bun version minor --no-git-tag-version",
+    "version:major": "cd projects/ngx-umami && bun version major --no-git-tag-version",
     "prepublish:lib": "bun run lint && bun run test:coverage && bun run build",
-    "publish:lib": "cd dist/ngx-umami && bun publish --access public"
+    "publish:lib": "cd dist/ngx-umami && bun publish"
   },
   "dependencies": {
     "@angular/common": "21.2.12",
