@@ -1,5 +1,11 @@
 # ngx-umami
 
+A biblioteca `@cacic-fct/ngx-umami` é um fork para congelamento do código, por segurança.
+
+Como o pacote é publicado apenas para uso interno, é necessário adicionar o registro privado da organização para instalar a biblioteca.
+
+---
+
 Angular library for [Umami Analytics](https://umami.is/) - privacy-focused, lightweight analytics tracking for Angular applications.
 
 ## Features
@@ -33,9 +39,9 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideUmami({
       websiteId: 'your-website-id',
-      src: 'https://analytics.example.com/script.js'
-    })
-  ]
+      src: 'https://analytics.example.com/script.js',
+    }),
+  ],
 };
 ```
 
@@ -47,7 +53,7 @@ import { injectUmami } from 'ngx-umami';
 
 @Component({
   selector: 'app-example',
-  template: `<button (click)="onSignup()">Sign Up</button>`
+  template: `<button (click)="onSignup()">Sign Up</button>`,
 })
 export class ExampleComponent {
   private umami = injectUmami();
@@ -67,14 +73,14 @@ provideUmami({
   src: 'https://analytics.example.com/script.js',
 
   // Optional
-  enabled: true,              // Enable/disable tracking (default: true)
-  autoTrack: true,            // Auto track page views (default: true)
-  doNotTrack: false,          // Honor browser DNT setting (default: false)
-  domains: ['example.com'],   // Restrict to specific domains
-  tag: 'production',          // Tag for filtering in dashboard
-  excludeSearch: false,       // Exclude URL search params
-  excludeHash: false,         // Exclude URL hash
-  hostUrl: 'https://...'      // Custom host URL for proxy setups
+  enabled: true, // Enable/disable tracking (default: true)
+  autoTrack: true, // Auto track page views (default: true)
+  doNotTrack: false, // Honor browser DNT setting (default: false)
+  domains: ['example.com'], // Restrict to specific domains
+  tag: 'production', // Tag for filtering in dashboard
+  excludeSearch: false, // Exclude URL search params
+  excludeHash: false, // Exclude URL hash
+  hostUrl: 'https://...', // Custom host URL for proxy setups
 });
 ```
 
@@ -92,11 +98,11 @@ export const appConfig: ApplicationConfig = {
       (configService: ConfigService) => ({
         websiteId: configService.umamiWebsiteId,
         src: configService.umamiSrc,
-        enabled: configService.isProduction
+        enabled: configService.isProduction,
       }),
       [ConfigService]
-    )
-  ]
+    ),
+  ],
 };
 ```
 
@@ -114,10 +120,10 @@ export const appConfig: ApplicationConfig = {
     provideUmami({
       websiteId: 'your-website-id',
       src: 'https://analytics.example.com/script.js',
-      autoTrack: false // Disable auto tracking since router handles it
+      autoTrack: false, // Disable auto tracking since router handles it
     }),
-    withRouterTracking()
-  ]
+    withRouterTracking(),
+  ],
 };
 ```
 
@@ -137,7 +143,7 @@ umami.trackPageView();
 umami.trackPageView({
   url: '/custom-page',
   title: 'Custom Page',
-  referrer: 'https://google.com'
+  referrer: 'https://google.com',
 });
 ```
 
@@ -153,7 +159,7 @@ umami.trackEvent('button_click');
 umami.trackEvent('purchase', {
   product: 'Premium Plan',
   price: 99.99,
-  currency: 'USD'
+  currency: 'USD',
 });
 ```
 
@@ -199,17 +205,10 @@ Declarative event tracking in templates:
 <button umamiTrack="signup_click">Sign Up</button>
 
 <!-- With event data -->
-<button
-  umamiTrack="purchase"
-  [umamiTrackData]="{ product: 'Premium', price: 99 }">
-  Buy Now
-</button>
+<button umamiTrack="purchase" [umamiTrackData]="{ product: 'Premium', price: 99 }">Buy Now</button>
 
 <!-- Track on different events -->
-<input
-  umamiTrack="search_focus"
-  umamiTrackOn="focus"
-  placeholder="Search...">
+<input umamiTrack="search_focus" umamiTrackOn="focus" placeholder="Search..." />
 ```
 
 Supported events: `click`, `focus`, `blur`, `mouseenter`, `mouseleave`, `submit`
