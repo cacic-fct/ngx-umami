@@ -190,7 +190,7 @@ export class UmamiService implements OnDestroy {
     }
 
     if (payload) {
-      tracker.track(payload);
+      tracker.track((props) => ({ ...props, ...payload }));
     } else {
       tracker.track();
     }

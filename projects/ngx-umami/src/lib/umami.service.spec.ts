@@ -351,9 +351,28 @@ describe('UmamiService', () => {
       expect(mockTracker.track).toHaveBeenCalledWith();
     });
 
-    it('should call tracker.track(payload) for trackPageView with payload', () => {
+    it('should merge page view payload with default tracker properties', () => {
       service.trackPageView({ url: '/test', title: 'Test' });
-      expect(mockTracker.track).toHaveBeenCalledWith({ url: '/test', title: 'Test' });
+      expect(mockTracker.track).toHaveBeenCalledOnceWith(jasmine.any(Function));
+
+      const mergePayload = mockTracker.track.calls.mostRecent().args[0] as (props: {
+        website: string;
+        url: string;
+        hostname: string;
+      }) => { website: string; url: string; hostname: string; title: string };
+
+      expect(
+        mergePayload({
+          website: 'test-website-id',
+          url: 'https://example.com/old',
+          hostname: 'example.com',
+        })
+      ).toEqual({
+        website: 'test-website-id',
+        url: '/test',
+        hostname: 'example.com',
+        title: 'Test',
+      });
     });
 
     it('should call tracker.track(eventName) for trackEvent without data', () => {
