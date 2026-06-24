@@ -1,0 +1,133 @@
+name: Publish packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: Package to publish
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - ngx-umami
+
+  push:
+    branches:
+      - main
+    paths:
+      - package.json
+      - bun.lock
+      - angular.json
+      - projects/ngx-umami/**
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: publish-packages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    if: >
+      github.event_name != 'pull_request' &&
+      github.event_name != 'pull_request_target' &&
+      github.repository_owner == 'cacic-fct' &&
+      github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 26
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Detect changed packages
+        id: changes
+        shell: bash
+        run: |
+          ngx_umami=false
+
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            case "${{ inputs.package }}" in
+              all)
+                ngx_umami=true
+                ;;
+              ngx-umami)
+                ngx_umami=true
+                ;;
+            esac
+          else
+            base="${{ github.event.before }}"
+
+            if ! git rev-parse --verify "${base}^{commit}" >/dev/null 2>&1; then
+              base="$(git rev-list --max-parents=0 HEAD)"
+            fi
+
+            changed_files="$(git diff --name-only "${base}" "${{ github.sha }}")"
+
+            if grep -qE '^(package\.json|bun\.lock|angular\.json|projects/ngx-umami/)' <<< "${changed_files}"; then
+              ngx_umami=true
+            fi
+          fi
+
+          any_changed=false
+          if [[ "${ngx_umami}" == "true" ]]; then
+            any_changed=true
+          fi
+
+          {
+            echo "ngx_umami=${ngx_umami}"
+            echo "any_changed=${any_changed}"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        if: steps.changes.outputs.any_changed == 'true'
+
+      - name: Install dependencies
+        if: steps.changes.outputs.any_changed == 'true'
+        run: bun install --frozen-lockfile
+
+      - name: Build ngx-umami
+        if: steps.changes.outputs.ngx_umami == 'true'
+        run: bun run prepublish:lib
+
+      - name: Publish ngx-umami
+        if: steps.changes.outputs.ngx_umami == 'true'
+        working-directory: dist/ngx-umami
+        shell: bash
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+
+          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
+          if (pkg.name !== '@cacic-fct/ngx-umami') {
+            throw new Error(`Unexpected package name: ${pkg.name}`);
+          }
+
+          if (pkg.private) {
+            throw new Error('Package must not be private.');
+          }
+
+          if (pkg.publishConfig?.registry !== 'https://registry.npmjs.org') {
+            throw new Error(`Package must publish to npm. Found: ${pkg.publishConfig?.registry}`);
+          }
+
+          if (pkg.publishConfig?.access !== 'public') {
+            throw new Error(`Package must publish publicly. Found: ${pkg.publishConfig?.access}`);
+          }
+          NODE
+
+          npm publish --access public
