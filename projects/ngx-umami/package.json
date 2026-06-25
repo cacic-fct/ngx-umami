@@ -1,12 +1,12 @@
 {
   "name": "@cacic-fct/ngx-umami",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Angular library for Umami Analytics - privacy-focused, lightweight analytics tracking",
   "license": "MIT",
   "author": "Eddye Rios",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cacic-fct/ngx-umami.git"
+    "url": "git+https://github.com/cacic-fct/ngx-umami.git"
   },
   "keywords": [
     "angular",

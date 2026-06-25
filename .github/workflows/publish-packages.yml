@@ -19,6 +19,7 @@ on:
       - package.json
       - bun.lock
       - angular.json
+      - tools/verify-package-artifact.mjs
       - projects/ngx-umami/**
 
 permissions:
@@ -76,7 +77,7 @@ jobs:
 
             changed_files="$(git diff --name-only "${base}" "${{ github.sha }}")"
 
-            if grep -qE '^(package\.json|bun\.lock|angular\.json|projects/ngx-umami/)' <<< "${changed_files}"; then
+            if grep -qE '^(package\.json|bun\.lock|angular\.json|tools/verify-package-artifact\.mjs|projects/ngx-umami/)' <<< "${changed_files}"; then
               ngx_umami=true
             fi
           fi
@@ -102,6 +103,10 @@ jobs:
       - name: Build ngx-umami
         if: steps.changes.outputs.ngx_umami == 'true'
         run: bun run prepublish:lib
+
+      - name: Verify ngx-umami artifact
+        if: steps.changes.outputs.ngx_umami == 'true'
+        run: bun run verify:package
 
       - name: Publish ngx-umami
         if: steps.changes.outputs.ngx_umami == 'true'

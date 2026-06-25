@@ -1,7 +1,10 @@
 {
   "name": "@cacic-fct/ngx-umami",
-  "version": "0.0.1",
-  "private": true,
+  "version": "1.2.2",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
     "build": "ng build ngx-umami",
     "build:watch": "ng build ngx-umami --watch",
@@ -14,8 +17,10 @@
     "version:patch": "cd projects/ngx-umami && bun version patch --no-git-tag-version",
     "version:minor": "cd projects/ngx-umami && bun version minor --no-git-tag-version",
     "version:major": "cd projects/ngx-umami && bun version major --no-git-tag-version",
+    "verify:package": "bun tools/verify-package-artifact.mjs dist/ngx-umami",
     "prepublish:lib": "bun run lint && bun run test:coverage && bun run build",
-    "publish:lib": "cd dist/ngx-umami && npm publish --access public"
+    "prepublishOnly": "node -e \"throw new Error('Publish the built library with bun run publish:lib, not the repository root.')\"",
+    "publish:lib": "bun run verify:package && cd dist/ngx-umami && npm publish --access public"
   },
   "dependencies": {
     "@angular/common": "21.2.12",
