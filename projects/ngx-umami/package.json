@@ -1,6 +1,6 @@
 {
   "name": "@cacic-fct/ngx-umami",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Angular library for Umami Analytics - privacy-focused, lightweight analytics tracking",
   "license": "MIT",
   "author": "Eddye Rios",
@@ -20,7 +20,13 @@
   ],
   "peerDependencies": {
     "@angular/common": ">=17.0.0",
-    "@angular/core": ">=17.0.0"
+    "@angular/core": ">=17.0.0",
+    "@angular/router": ">=17.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@angular/router": {
+      "optional": true
+    }
   },
   "publishConfig": {
     "access": "public",

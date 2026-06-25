@@ -2,7 +2,7 @@
 
 Angular library for [Umami Analytics](https://umami.is/) - a privacy-focused, lightweight analytics platform.
 
-[![npm version](https://badge.fury.io/js/ngx-umami.svg)](https://www.npmjs.com/package/ngx-umami)
+[![npm version](https://badge.fury.io/js/%40cacic-fct%2Fngx-umami.svg)](https://www.npmjs.com/package/@cacic-fct/ngx-umami)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Features
@@ -19,19 +19,19 @@ Angular library for [Umami Analytics](https://umami.is/) - a privacy-focused, li
 
 | Angular Version | ngx-umami Version |
 |-----------------|-------------------|
-| 17.x - 21.x     | 1.x               |
+| 17.x and later  | 1.x               |
 
 ## Installation
 
 ```bash
 # Recommended
-pnpm add ngx-umami
+pnpm add @cacic-fct/ngx-umami
 
 # Or with npm
-npm install ngx-umami
+npm install @cacic-fct/ngx-umami
 
 # Or with yarn
-yarn add ngx-umami
+yarn add @cacic-fct/ngx-umami
 ```
 
 > **Note:** We recommend using [pnpm](https://pnpm.io/) for faster installs and better disk space efficiency.
@@ -44,7 +44,7 @@ yarn add ngx-umami
 // app.config.ts
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideUmami, withRouterTracking } from 'ngx-umami';
+import { provideUmami, withRouterTracking } from '@cacic-fct/ngx-umami';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -63,7 +63,7 @@ export const appConfig: ApplicationConfig = {
 
 ```typescript
 import { Component } from '@angular/core';
-import { injectUmami } from 'ngx-umami';
+import { injectUmami } from '@cacic-fct/ngx-umami';
 
 @Component({
   selector: 'app-checkout',
@@ -86,7 +86,7 @@ export class CheckoutComponent {
 
 ```typescript
 import { Component } from '@angular/core';
-import { UmamiTrackDirective } from 'ngx-umami';
+import { UmamiTrackDirective } from '@cacic-fct/ngx-umami';
 
 @Component({
   selector: 'app-signup',
@@ -250,7 +250,7 @@ providers: [
 Configure Umami using a factory function with dependency injection.
 
 ```typescript
-import { provideUmamiWithFactory } from 'ngx-umami';
+import { provideUmamiWithFactory } from '@cacic-fct/ngx-umami';
 import { ConfigService } from './config.service';
 
 providers: [

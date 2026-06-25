@@ -1,4 +1,4 @@
-# ngx-umami
+# @cacic-fct/ngx-umami
 
 > [!CAUTION]
 > Package is unsupported

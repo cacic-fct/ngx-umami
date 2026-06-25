@@ -32,6 +32,22 @@ if (packageJson.publishConfig?.access !== 'public') {
   throw new Error(`Package must publish publicly. Found: ${packageJson.publishConfig?.access}`);
 }
 
+const expectedPeerDependencies = {
+  '@angular/common': '>=17.0.0',
+  '@angular/core': '>=17.0.0',
+  '@angular/router': '>=17.0.0',
+};
+
+for (const [name, range] of Object.entries(expectedPeerDependencies)) {
+  if (packageJson.peerDependencies?.[name] !== range) {
+    throw new Error(`Expected peer dependency ${name}@${range}. Found: ${packageJson.peerDependencies?.[name]}`);
+  }
+}
+
+if (packageJson.peerDependenciesMeta?.['@angular/router']?.optional !== true) {
+  throw new Error('@angular/router must be marked as an optional peer dependency.');
+}
+
 const requiredFiles = [
   'fesm2022/cacic-fct-ngx-umami.mjs',
   'types/cacic-fct-ngx-umami.d.ts',
